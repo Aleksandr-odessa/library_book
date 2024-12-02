@@ -1,6 +1,8 @@
 """Модуль формирования и обработки данных библиотеки"""
 
 import json
+from logging import ERROR
+
 from ReadWrite import ReadWrite
 from book import Book
 
@@ -39,13 +41,17 @@ class Library:
         Returns:
             dict: Словарь с данными добавленной книги.
         """
+
+        if not Library.check_year(year):
+            return {"error": "Год введен не верно"}
+        if not Library.check_author(author):
+            return {"error": "Автор не может содержать цифры"}
+
         book: Book = Book(title, author, year)
         book_id = len(self.books) + 1
         dict_book = book.to_dict()
         self.books[str(book_id)] = dict_book
         await self.file_.write_(self.books)
-        for i in self.books.keys():
-            print(f'5={type(i)}')
         return dict_book
 
     async def display_books(self) -> list:
@@ -65,9 +71,6 @@ class Library:
         Returns:
             dict | None: Удаленная книга или None, если книга не найдена.
         """
-        for i in self.books.keys():
-            print(f'2={type(i)}')
-        print(f'3={type(book_id)}')
         if book_id in self.books.keys():
             removed_book = self.books.pop(book_id)
             await self.file_.write_(self.books)
@@ -111,7 +114,8 @@ class Library:
         await self.file_.write_(self.books)
         return book
 
-    def check_year(self, year: str) -> bool:
+    @staticmethod
+    def check_year(year: str) -> bool:
         """
         Проверяет, является ли заданный год действительным.
 
@@ -125,4 +129,19 @@ class Library:
         if not year.isdigit():
             return False
         if 1500 <= int(year) <= 3000:
+            return True
+
+    @staticmethod
+    def check_author(author:str) -> bool:
+        """
+        Проверяет, состоит ли имя автора из букв.
+
+        Аргументы:
+        author (str): автор.
+
+        Возвращает:
+        bool: True, если автор не является "строкой без цифр",
+              иначе False.
+        """
+        if not author.isdigit():
             return True

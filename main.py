@@ -45,15 +45,12 @@ async def add_book(library: Library) -> None:
     title = input("Введите название книги: ")
     author = input("Введите автора книги: ")
     year = input("Введите год издания: ")
-    book_year = library.check_year(year)
-
-    if not book_year:
-        print("Год введен не верно")
-        return
-
     data = await library.add_book(title, author, year)
-    await display_book(data)
-    print("успешно добавлена")
+    try:
+        await display_book(data)
+        print("успешно добавлена")
+    except KeyError:
+        print(data["error"])
 
 async def remove_book(library: Library) -> None:
     """Удаляет книгу из библиотеки."""
