@@ -57,10 +57,16 @@ class TestLibrary:
     async def test_add_book_error_author(self, library):
         """Тест на добавление книги в библиотеку"""
         book = await library.add_book("Test Book", "12345", "2021")
-        assert book['error'] == "Автор не может содержать цифры"
-        return {"error": "Год введен не верно"}
+        assert book['error'] == "Имя автора не может быть пустым или содержать цифры"
 
-    # Тест для добавления книги ( неверный год). Негативный сценарий
+    # Тест для добавления книги (пустой поле названия книги). Негативный сценарий
+    @pytest.mark.asyncio
+    async def test_add_book_error_author(self, library):
+        """Тест на добавление книги в библиотеку"""
+        book = await library.add_book("", "Test Author","2021")
+        assert book['error'] == "Введите название книги"
+
+    # Тест для добавления книги (неверный год). Негативный сценарий
     @pytest.mark.asyncio
     async def test_add_book_error_author(self, library):
         """Тест на добавление книги в библиотеку"""

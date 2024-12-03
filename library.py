@@ -41,11 +41,12 @@ class Library:
         Returns:
             dict: Словарь с данными добавленной книги.
         """
-
+        if not title:
+            return {"error": "Введите название книги"}
         if not Library.check_year(year):
             return {"error": "Год введен не верно"}
         if not Library.check_author(author):
-            return {"error": "Автор не может содержать цифры"}
+            return {"error": "Имя автора не может быть пустым или содержать цифры"}
 
         book: Book = Book(title, author, year)
         book_id = len(self.books) + 1
@@ -143,5 +144,5 @@ class Library:
         bool: True, если автор не является "строкой без цифр",
               иначе False.
         """
-        if not author.isdigit():
+        if author and not author.isdigit():
             return True
