@@ -1,4 +1,4 @@
-"""Главный модуль"""
+"""Main modul"""
 import asyncio
 
 from config import display_book
